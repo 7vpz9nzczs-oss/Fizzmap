@@ -1,17 +1,6 @@
-// FIZZMAP 6.1 — One-file application shell: images, CSS, and JS inline in index.html.
-const CACHE='fizzmap-release-6-1-selfcontained';
-const SHELL=['./','./index.html'];
-self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
-});
-self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('fizzmap-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
-});
-self.addEventListener('fetch',event=>{
-  const req=event.request;
-  if(req.method!=='GET'||new URL(req.url).origin!==self.location.origin)return;
-  event.respondWith(fetch(req).then(resp=>{
-    if(resp.ok){const copy=resp.clone();caches.open(CACHE).then(cache=>cache.put(req,copy)).catch(()=>{});}
-    return resp;
-  }).catch(async()=>await caches.match(req) || await caches.match('./index.html') || Response.error()));
-});
+// FIZZMAP 6.3 – network-first app shell; source-of-truth user data is in IndexedDB / Supabase.
+const CACHE='fizzmap-release-6-3-crew';
+const SHELL=['./','./index.html','./fizzmap-config.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
+self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('fizzmap-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET'||new URL(req.url).origin!==self.location.origin)return;event.respondWith(fetch(req).then(resp=>{if(resp.ok){let clone=resp.clone();caches.open(CACHE).then(c=>c.put(req,clone)).catch(()=>{})}return resp}).catch(()=>caches.match(req).then(r=>r||caches.match('./index.html'))))});
