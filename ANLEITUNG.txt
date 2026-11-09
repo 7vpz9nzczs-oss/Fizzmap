@@ -1,0 +1,7 @@
+FIZZMAP 6.1 REPARATUR
+
+Einfachste Reparatur: index.html im GitHub-Repository am selben Ort wie bisher ersetzen.
+Alternativ vollständiges Update: index.html, sw.js, manifest.webmanifest, icon-192.png und icon-512.png gemeinsam ins bisherige GitHub-Pages-Verzeichnis hochladen.
+Die SVG-Etiketten und CSS/JS sind vollständig in index.html eingebettet, weitere assets/labels-Verzeichnisse sind NICHT erforderlich.
+Veröffentlichung auf demselben GitHub Pages URL; gespeichert Drinkdaten werden von der App nicht absichtlich gelöscht. Vor Updates möglichst Backup erstellen.
+Safari-Test auf derselben URL mit ?fix=61 am Ende. Safari-Websitedaten nicht löschen.
